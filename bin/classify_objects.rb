@@ -42,7 +42,7 @@ opt_parser = OptionParser.new do |opts|
     |number| options[:number] = number
   }
 
-  opts.on('-g', '--git-gc', 'Run git gc first') {
+  opts.on('-g', '--git-gc', 'Run git gc (you should do this the first run)') {
     |gitgc| options[:gitgc] = gitgc
   }
 
@@ -54,6 +54,7 @@ end.parse!
 # get to work!
 abort("Can't find directory, #{GIT_DIR}, cd to root of your repo.") unless Dir.exists?(GIT_DIR)
 
+# TODO: puts message isn't showing up.
 puts "Running git gc" && `git gc` if options[:gitgc]
 
 abort("No #{GIT_FILES} files found, run `git gc`") if (Dir.glob(GIT_FILES).size < 1)
@@ -75,6 +76,8 @@ puts "Classifying #{num_objects} largest objects in repo"
   #   e.g. path = `git rev-list --objects --all | \grep #{sha1}`.split.last
   # Making an assumption that sha1 will be first element from `git rev-list`
   revlist = `git rev-list --objects --all | \grep #{sha1}`
+  abort("Didn't find #{sha1} in rev-list [#{revlist}], run 'git gc' and try again") if revlist.nil? || revlist.empty?
+  abort("Unexpected rev-list format [#{revlist}], expect 40-char sha1 to be first part of revlist output") unless revlist.index(/\s/) == 40
   path = revlist.slice(41..-1).chomp;
 
   if File.file?(path)
