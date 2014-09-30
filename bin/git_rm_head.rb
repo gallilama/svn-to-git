@@ -75,6 +75,7 @@ BEGIN {
     `git rm #{opts} #{asset}` unless dry_run
   end
 
+  # Note: Command output assumes you've aliased bfg='java -jar <PATH>/bfg.jar'
   def print_bfg (dirs, files)
     dir_str = dirs.join(", ") 
     puts "bfg --delete-folders '{#{dir_str}}' <PATH_TO_MIRROR>"
