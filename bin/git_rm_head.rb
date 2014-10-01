@@ -20,6 +20,7 @@
 #   $ ruby <path_to>git_rm_head.rb --dirs --files
 #
 # Remember to escape dir, or files names that contain spaces with '\ '.
+#
 
 require 'optparse'
  
@@ -79,6 +80,7 @@ BEGIN {
   def print_bfg (dirs, files)
     dir_str = dirs.join(", ") 
     puts "bfg --delete-folders '{#{dir_str}}' <PATH_TO_MIRROR>"
+    # TODO: bfg --delete-files doesn't accept paths, just file names.
   end
 
   def debug_options (options)
